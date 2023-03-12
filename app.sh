@@ -1,4 +1,54 @@
 #!/bin/bash
+#Se agrega el menu de metodologias
+function menu_metodologias() {
+  if [ "$1" == "-a" ]; then
+    echo "Bienvenido a la guía rápida de Agile, para continuar seleccione un tema:"
+    pregunta="Seleccione una opción: "
+    opciones=("SCRUM" "X.P." "Kanban" "Crystal")
+    select opt in "${opciones[@]}"
+    do
+      case $opt in
+        "SCRUM")
+          echo "Ha seleccionado SCRUM"
+          ;;
+        "X.P.")
+          echo "Ha seleccionado X.P."
+          ;;
+        "Kanban")
+          echo "Ha seleccionado Kanban"
+          ;;
+        "Crystal")
+          echo "Ha seleccionado Crystal"
+          ;;
+        *) echo "Opción inválida $REPLY";;
+      esac
+    done
+  elif [ "$1" == "-t" ]; then
+    echo "Bienvenido a la guía rápida de metodologías tradicionales, para continuar seleccione un tema:"
+    pregunta="Seleccione una opción: "
+    opciones=("Cascada" "Espiral" "Modelo V")
+    select opt in "${opciones[@]}"
+    do
+      case $opt in
+        "Cascada")
+          echo "Ha seleccionado Cascada"
+          ;;
+        "Espiral")
+          echo "Ha seleccionado Espiral"
+          ;;
+        "Modelo V")
+          echo "Ha seleccionado Modelo V"
+          ;;
+        *) echo "Opción inválida $REPLY";;
+      esac
+    done
+  else
+    echo "Debe especificar una opción válida: -a para metodologías ágiles, -t para metodologías tradicionales."
+    exit 1
+  fi
+}
+
+menu_metodologias "$@"
 
 #Funcion para agregar informacion a un archivo, primero se usa la funcion de buscar para verificar que la llave que se quiere
 #ingresar no existe en el archivo, si esta ya existe no te dejara insertarla, en el caso contrario usa el operador de entrada
