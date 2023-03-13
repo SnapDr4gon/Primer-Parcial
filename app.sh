@@ -129,3 +129,42 @@ makeFiles () {
         done
     fi
 }
+
+#Funcion submenú
+submenu () {
+
+seccion="nombre de la sección"
+
+#Imprime la bienvenida y despliega el menú
+echo "Usted está en la sección $seccion, seleccione la op>
+
+echo "1. Agregar información"
+echo "2. Buscar"
+echo "3. Eliminar información"
+echo "4. Leer base de información."
+
+#Lee la opción seleccionada
+read opcion
+
+#se ejecuta la opción seleccionada
+case $opcion in
+    1)
+        echo "Seleccionó la opción Agregar información"
+        ;;
+    2)
+        echo "Seleccionó la opción Buscar"
+        ;;
+    3)
+        echo "Seleccionó la opción Eliminar información"
+        ;;
+    4)
+        echo "Seleccionó la opción Leer base de información"
+        ;;
+	*)
+        echo "[!]Opción inválida intentelo de nuevo"
+        ;;
+esac
+
+}
+
+#submenu
