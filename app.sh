@@ -126,3 +126,21 @@ makeFiles () {
         done
     fi
 }
+
+#Esta funcion usa dos parametros, el primero es un entero que manda el flujo del programa segun la opcion que se elijio en la
+#funcion de menuSeccion, el segundo parametro es el nombre de la seccion el cual se usa para hacer operaciones en el archivo
+#de la metodologia que se elijio, en caso de que el primer parametro no caiga dentro de las opciones se muestra en mensaje de
+#error
+lanzarOpciones () {
+    if [[ $1 -eq 1 ]]; then
+        agregarInformacion $2
+    elif [[ $1 -eq 2 ]]; then
+        buscar $2
+    elif [[ $1 -eq 3 ]]; then
+        eliminarInformacion $2
+    elif [[ $1 -eq 4 ]]; then
+        leerInformacion $2
+    else
+        echo "La opcion que ingreso no es valida"
+    fi
+}
