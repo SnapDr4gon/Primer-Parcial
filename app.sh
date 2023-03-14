@@ -145,6 +145,35 @@ lanzarOpciones () {
     fi
 }
 
+#Esta funcion se usa para saber que proceso se hara despues de ejecutar una accion, primero pregunta el numero de opcion que se
+#desea realizar, en caso de que sea la 1 se manda a llamar a menuSeccion, luego menuSeccion retorna su numero de opcion a la
+#funcion llamada lanzarOpciones la cual ejecuta el proceso que se escoja, si se elige el dos se llama de nuevo a
+#menuMetodologias y se se escoje el tres se sale del bucle, lo que termina la ejecucion del programa
+redireccionar () {
+    redir=1
+
+    while [[ redir -ge 1 && redir -le 3 ]]; do
+        echo "¿Que desea hacer ahora?"
+        echo "1. Realizar otra opcion"
+        echo "2. Regresar al menu anterior"
+        echo "3. Terminar la ejecucion"
+        read -p "Ingrese el numero de la opcion que desea realizar: " redir
+
+        if [[ redir -eq 1 ]]; then
+            menuSeccion $1
+            lanzarOpciones $? $1
+        elif [[ redir -eq 2 ]]; then
+            menuMetodologias $2
+        elif [[ redir -eq 3 ]]; then
+            echo "Vuelva pronto :)"
+            break
+        else
+            echo "La opcion que ingreso no existe"
+            break
+        fi
+    done
+}
+
 #Funcion principal
 makeFiles
 
