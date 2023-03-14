@@ -1,54 +1,51 @@
 #!/bin/bash
-#Se agrega el menu de metodologias
-function menu_metodologias() {
-  if [ "$1" == "-a" ]; then
-    echo "Bienvenido a la guía rápida de Agile, para continuar seleccione un tema:"
-    pregunta="Seleccione una opción: "
-    opciones=("SCRUM" "X.P." "Kanban" "Crystal")
-    select opt in "${opciones[@]}"
-    do
-      case $opt in
-        "SCRUM")
-          echo "Ha seleccionado SCRUM"
-          ;;
-        "X.P.")
-          echo "Ha seleccionado X.P."
-          ;;
-        "Kanban")
-          echo "Ha seleccionado Kanban"
-          ;;
-        "Crystal")
-          echo "Ha seleccionado Crystal"
-          ;;
-        *) echo "Opción inválida $REPLY";;
-      esac
-    done
-  elif [ "$1" == "-t" ]; then
-    echo "Bienvenido a la guía rápida de metodologías tradicionales, para continuar seleccione un tema:"
-    pregunta="Seleccione una opción: "
-    opciones=("Cascada" "Espiral" "Modelo V")
-    select opt in "${opciones[@]}"
-    do
-      case $opt in
-        "Cascada")
-          echo "Ha seleccionado Cascada"
-          ;;
-        "Espiral")
-          echo "Ha seleccionado Espiral"
-          ;;
-        "Modelo V")
-          echo "Ha seleccionado Modelo V"
-          ;;
-        *) echo "Opción inválida $REPLY";;
-      esac
-    done
-  else
-    echo "Debe especificar una opción válida: -a para metodologías ágiles, -t para metodologías tradicionales."
-    exit 1
-  fi
+
+#Si esta funcion recibe un -a entonces manda a llamar a la funcion de metodologiasAgiles, luego pregunta el nombre de la seccion
+#a la que quiere ingresar, llama a la funcion del menuSeccion en la cual se encuentran las opciones para hacer;
+#luego se ejecuta una funcion llamada redireccionar en la cual se pregunta cual es el siguiente paso que quiere realizar.
+#En cambio si recibe un -t hace lo mismo per ahora con la funcion de metodologias tradicionales, en caso de que no reciba ninguno
+#de los dos parametros anteriores muestra un mensaje de error
+menuMetodologias () {
+    if [[ $1 == "-a" ]]; then
+        metodologiasAgiles
+        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
+        if [[ $nombreSeccion == "SCRUM" || $nombreSeccion == "X.P" || $nombreSeccion == "Kanban" || $nombreSeccion == "Crystal" ]]; then
+            menuSeccion $nombreSeccion
+            lanzarOpciones $? $nombreSeccion
+            redireccionar $nombreSeccion $metodologia
+        else
+            echo "La opcion que ingreso no existe"
+        fi
+    elif [[ $1 == "-t" ]]; then
+        metodologiasTradicionales
+        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
+        if [[ $nombreSeccion == "Cascada" || $nombreSeccion == "Espiral" || $nombreSeccion == "Modelo V" ]]; then
+            menuSeccion $nombreSeccion
+            lanzarOpciones $? $nombreSeccion
+        else
+            echo "La opcion que ingreso no existe"
+        fi
+    else
+        echo "La seccion a la que quiere ingresar no existe"
+        exit 1
+    fi
 }
 
-menu_metodologias "$@"
+#Funcion con el menu de secciones
+menuSeccion () {
+    echo "Usted esta en la seccion $1"
+    echo "1. Agregar informacion"
+    echo "2. Buscar"
+    echo "3. Eliminar informacion"
+    echo "4. Leer base de informacion"
+    read -p "Ingrese el numero de opcion que desea realizar: " opcion
+
+    if [[ opcion -eq 1 || opcion -eq 2 || opcion -eq 3 || opcion -eq 4 ]]; then
+        return $opcion
+    else
+        echo "La opcion que eligio no existe"
+    fi
+}
 
 #Funcion para agregar informacion a un archivo, primero se usa la funcion de buscar para verificar que la llave que se quiere
 #ingresar no existe en el archivo, si esta ya existe no te dejara insertarla, en el caso contrario usa el operador de entrada
@@ -129,42 +126,3 @@ makeFiles () {
         done
     fi
 }
-
-#Funcion submenú
-submenu () {
-
-seccion="nombre de la sección"
-
-#Imprime la bienvenida y despliega el menú
-echo "Usted está en la sección $seccion, seleccione la op>
-
-echo "1. Agregar información"
-echo "2. Buscar"
-echo "3. Eliminar información"
-echo "4. Leer base de información."
-
-#Lee la opción seleccionada
-read opcion
-
-#se ejecuta la opción seleccionada
-case $opcion in
-    1)
-        echo "Seleccionó la opción Agregar información"
-        ;;
-    2)
-        echo "Seleccionó la opción Buscar"
-        ;;
-    3)
-        echo "Seleccionó la opción Eliminar información"
-        ;;
-    4)
-        echo "Seleccionó la opción Leer base de información"
-        ;;
-	*)
-        echo "[!]Opción inválida intentelo de nuevo"
-        ;;
-esac
-
-}
-
-#submenu
