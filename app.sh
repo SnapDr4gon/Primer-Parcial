@@ -22,6 +22,7 @@ menuMetodologias () {
         if [[ $nombreSeccion == "Cascada" || $nombreSeccion == "Espiral" || $nombreSeccion == "Modelo V" ]]; then
             menuSeccion $nombreSeccion
             lanzarOpciones $? $nombreSeccion
+	    redireccionar $nombreSeccion $metodologia
         else
             echo "La opcion que ingreso no existe"
         fi
