@@ -144,3 +144,10 @@ lanzarOpciones () {
         echo "La opcion que ingreso no es valida"
     fi
 }
+
+#Funcion principal
+makeFiles
+
+metodologia=$1
+
+menuMetodologias $metodologia
