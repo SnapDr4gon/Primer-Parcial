@@ -1,35 +1,20 @@
 #!/bin/bash
 
-#Si esta funcion recibe un -a entonces manda a llamar a la funcion de metodologiasAgiles, luego pregunta el nombre de la seccion
-#a la que quiere ingresar, llama a la funcion del menuSeccion en la cual se encuentran las opciones para hacer;
-#luego se ejecuta una funcion llamada redireccionar en la cual se pregunta cual es el siguiente paso que quiere realizar.
-#En cambio si recibe un -t hace lo mismo per ahora con la funcion de metodologias tradicionales, en caso de que no reciba ninguno
-#de los dos parametros anteriores muestra un mensaje de error
-menuMetodologias () {
-    if [[ $1 == "-a" ]]; then
-        metodologiasAgiles
-        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
-        if [[ $nombreSeccion == "SCRUM" || $nombreSeccion == "X.P" || $nombreSeccion == "Kanban" || $nombreSeccion == "Crystal" ]]; then
-            menuSeccion $nombreSeccion
-            lanzarOpciones $? $nombreSeccion
-            redireccionar $nombreSeccion $metodologia
-        else
-            echo "La opcion que ingreso no existe"
-        fi
-    elif [[ $1 == "-t" ]]; then
-        metodologiasTradicionales
-        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
-        if [[ $nombreSeccion == "Cascada" || $nombreSeccion == "Espiral" || $nombreSeccion == "Modelo V" ]]; then
-            menuSeccion $nombreSeccion
-            lanzarOpciones $? $nombreSeccion
-	    redireccionar $nombreSeccion $metodologia
-        else
-            echo "La opcion que ingreso no existe"
-        fi
-    else
-        echo "La seccion a la que quiere ingresar no existe"
-        exit 1
-    fi
+#Funcion que muestra el menu para las metodologias agiles
+metodologiasAgiles () {
+    echo "Bienvenido a la guia rapida de Agile, para continuar seleccione un tema: "
+    echo "1. SCRUM"
+    echo "2. X.P"
+    echo "3. Kanban"
+    echo "4. Crystal"
+}
+
+#Funcion que muestra el menu para las metodologias tradicionales
+metodologiasTradicionales () {
+    echo "Bienvenido a la guia rapida de metodologias tradicionales, para continuar seleccione un tema: "
+    echo "1. Cascada"
+    echo "2. Espiral"
+    echo "3. Modelo V"
 }
 
 #Funcion con el menu de secciones
@@ -125,6 +110,37 @@ makeFiles () {
         for name in ${metodologias[@]}; do
             echo `touch ~/INF/$name.inf`
         done
+    fi
+}
+
+#Si esta funcion recibe un -a entonces manda a llamar a la funcion de metodologiasAgiles, luego pregunta el nombre de la seccion
+#a la que quiere ingresar, llama a la funcion del menuSeccion en la cual se encuentran las opciones para hacer;
+#luego se ejecuta una funcion llamada redireccionar en la cual se pregunta cual es el siguiente paso que quiere realizar.
+#En cambio si recibe un -t hace lo mismo per ahora con la funcion de metodologias tradicionales, en caso de que no reciba ninguno
+#de los dos parametros anteriores muestra un mensaje de error
+menuMetodologias () {
+    if [[ $1 == "-a" ]]; then
+        metodologiasAgiles
+        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
+        if [[ $nombreSeccion == "SCRUM" || $nombreSeccion == "X.P" || $nombreSeccion == "Kanban" || $nombreSeccion == "Crystal" ]]; then
+            menuSeccion $nombreSeccion
+            lanzarOpciones $? $nombreSeccion
+            redireccionar $nombreSeccion $metodologia
+        else
+            echo "La opcion que ingreso no existe"
+        fi
+    elif [[ $1 == "-t" ]]; then
+        metodologiasTradicionales
+        read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
+        if [[ $nombreSeccion == "Cascada" || $nombreSeccion == "Espiral" || $nombreSeccion == "Modelo V" ]]; then
+            menuSeccion $nombreSeccion
+            lanzarOpciones $? $nombreSeccion
+        else
+            echo "La opcion que ingreso no existe"
+        fi
+    else
+        echo "La seccion a la que quiere ingresar no existe"
+        exit 1
     fi
 }
 
