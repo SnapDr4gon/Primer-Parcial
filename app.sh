@@ -2,24 +2,24 @@
 
 #Funcion que muestra el menu para las metodologias agiles
 metodologiasAgiles () {
-    echo "Bienvenido a la guia rapida de Agile, para continuar seleccione un tema: "
-    echo "1. SCRUM"
-    echo "2. X.P"
-    echo "3. Kanban"
-    echo "4. Crystal"
+    echo -e "\nBienvenido a la guia rapida de Agile, para continuar seleccione un tema: "
+    echo -e "\t1. SCRUM"
+    echo -e "\t2. X.P"
+    echo -e "\t3. Kanban"
+    echo -e "\t4. Crystal"
 }
 
 #Funcion que muestra el menu para las metodologias tradicionales
 metodologiasTradicionales () {
-    echo "Bienvenido a la guia rapida de metodologias tradicionales, para continuar seleccione un tema: "
-    echo "1. Cascada"
-    echo "2. Espiral"
-    echo "3. Modelo V"
+    echo -e "\nBienvenido a la guia rapida de metodologias tradicionales, para continuar seleccione un tema: "
+    echo -e "\t1. Cascada"
+    echo -e "\t2. Espiral"
+    echo -e "\t3. Modelo V"
 }
 
 #Funcion con el menu de secciones
 menuSeccion () {
-    echo "Usted esta en la seccion $1"
+    echo -e "\n\tUsted esta en la seccion $1"
     echo "1. Agregar informacion"
     echo "2. Buscar"
     echo "3. Eliminar informacion"
@@ -29,7 +29,7 @@ menuSeccion () {
     if [[ opcion -eq 1 || opcion -eq 2 || opcion -eq 3 || opcion -eq 4 ]]; then
         return $opcion
     else
-        echo "La opcion que eligio no existe"
+        echo -e "\n\tLa opcion que eligio no existe"
     fi
 }
 
@@ -39,11 +39,12 @@ menuSeccion () {
 agregarInformacion () {
     read -p "Ingrese el identificador del concepto: " identificador
 
-    buscar $identificador $1
+    _buscar $identificador $1
 
     if [[ $? -eq 1 ]]; then
-        echo "Este concepto ya existe en el archivo, intente con uno diferente"
+        echo -e "\n\tEste concepto ya existe en el archivo, intente con uno diferente"
     else
+        echo -e "\n"
         read -p "Ingrese el concepto que desea asociar al identificador: " concepto
 
         #Se guardan los valores de llave-valor en el formato indicado
@@ -57,19 +58,28 @@ agregarInformacion () {
     fi
 }
 
+_buscar () {
+    buscar=`grep $1 ~/INF/$2.inf`
+
+    if [[ $buscar ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 #Esta funcion se usa para buscar informacion dentro de un archivo, esta usa el comando "grep" para comprobar que dicha 
 #expresion regular existe en el archivo, si es asi retorna un 1 pero si no se encuentra se regresa un 0
 buscar () {
+    echo -e "\n"
     read -p "Ingrese el identificador que desea buscar: " identificador
 
     buscarIdentificador=`grep $identificador ~/INF/$1.inf`
 
     if [[ $buscarIdentificador ]]; then
-        return 1
-        #echo `cat $nombreSeleccion.inf | grep $identificador`
+        echo `cat $nombreSeleccion.inf | grep $identificador`
     else
-        return 0
-        #echo "Este identificador no existe en el archivo"
+        echo -e "\n\tEste identificador no existe en el archivo"
     fi
 }
 
@@ -77,15 +87,16 @@ buscar () {
 #buscar para comprobar que el concepto que se quiere eliminar existe, si la funcion buscar retorna un 1 se ejecuta el comando
 #guardado dentro de "eliminarIdentificador" y si se retorna un 0 se despliega un mensaje de error
 eliminarInformacion () {
+    echo -e "\n"
     read -p "Ingrese el identificador del concepto que desea eliminar: " identificador
 
-    buscar $identificador $1
+    _buscar $identificador $1
     eliminarIdentificador=`sed -i "/$identificador/d" ~/INF/$1.inf`
 
     if [[ $? -eq 1 ]]; then
         echo $eliminarIdentificador
     else
-        echo "El concepto que quiere eliminar no existe en el archivo"
+        echo -e "\n\tEl concepto que quiere eliminar no existe en el archivo"
     fi
 }
 
@@ -99,7 +110,7 @@ leerInformacion () {
 #cada una de las metodologias
 makeFiles () {
     if [[ -d ~/INF/ ]]; then
-        echo "El directiorio ya existe, no se creara uno nuevo"
+        echo -e "\n\tEl directiorio ya existe, no se creara uno nuevo"
     else
         makeDirectory=`mkdir ~/INF/`
 
@@ -121,25 +132,28 @@ makeFiles () {
 menuMetodologias () {
     if [[ $1 == "-a" ]]; then
         metodologiasAgiles
+        echo -e "\n"
         read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
         if [[ $nombreSeccion == "SCRUM" || $nombreSeccion == "X.P" || $nombreSeccion == "Kanban" || $nombreSeccion == "Crystal" ]]; then
             menuSeccion $nombreSeccion
             lanzarOpciones $? $nombreSeccion
             redireccionar $nombreSeccion $metodologia
         else
-            echo "La opcion que ingreso no existe"
+            echo -e "\n\tLa opcion que ingreso no existe"
         fi
     elif [[ $1 == "-t" ]]; then
         metodologiasTradicionales
+        echo -e "\n"
         read -p "Ingrese el nombre de la seccion a la que quiere ingresar: " nombreSeccion
         if [[ $nombreSeccion == "Cascada" || $nombreSeccion == "Espiral" || $nombreSeccion == "Modelo V" ]]; then
             menuSeccion $nombreSeccion
             lanzarOpciones $? $nombreSeccion
+	        redireccionar $nombreSeccion $metodologia
         else
-            echo "La opcion que ingreso no existe"
+            echo -e "\n\tLa opcion que ingreso no existe"
         fi
     else
-        echo "La seccion a la que quiere ingresar no existe"
+        echo -e "\n\tLa seccion a la que quiere ingresar no existe"
         exit 1
     fi
 }
@@ -158,7 +172,7 @@ lanzarOpciones () {
     elif [[ $1 -eq 4 ]]; then
         leerInformacion $2
     else
-        echo "La opcion que ingreso no es valida"
+        echo -e "\n\tLa opcion que ingreso no es valida"
     fi
 }
 
@@ -170,7 +184,7 @@ redireccionar () {
     redir=1
 
     while [[ redir -ge 1 && redir -le 3 ]]; do
-        echo "¿Que desea hacer ahora?"
+        echo -e "\n\t¿Que desea hacer ahora?"
         echo "1. Realizar otra opcion"
         echo "2. Regresar al menu anterior"
         echo "3. Terminar la ejecucion"
@@ -182,16 +196,17 @@ redireccionar () {
         elif [[ redir -eq 2 ]]; then
             menuMetodologias $2
         elif [[ redir -eq 3 ]]; then
-            echo "Vuelva pronto :)"
+            echo -e "\n\tVuelva pronto :)"
             break
         else
-            echo "La opcion que ingreso no existe"
+            echo -e "\nLa opcion que ingreso no existe"
             break
         fi
     done
 }
 
 #Funcion principal
+echo -e "Jared Flores\nGabriel Bustillos\nGabriel Prieto"
 makeFiles
 
 metodologia=$1
